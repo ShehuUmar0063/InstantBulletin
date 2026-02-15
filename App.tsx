@@ -131,6 +131,7 @@ const App: React.FC = () => {
       fit: 'cover',
       position: { x: 50, y: 50 }
     },
+    logo: undefined,
     additionalPages: []
   });
 

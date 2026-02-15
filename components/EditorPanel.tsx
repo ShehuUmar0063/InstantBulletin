@@ -11,7 +11,8 @@ import {
   ZoomIn,
   RefreshCcw,
   MoveHorizontal,
-  MoveVertical
+  MoveVertical,
+  ShieldCheck
 } from 'lucide-react';
 import { EventData, BulletinConfig, EventPage, ImageMetadata } from '../types';
 
@@ -46,7 +47,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
     onEventUpdate({ highlights: eventData.highlights.filter((_, i) => i !== index) });
   };
 
-  const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>, pageIdx: number | 'cover') => {
+  const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>, pageIdx: number | 'cover' | 'logo') => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -54,12 +55,14 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
         const metadata: ImageMetadata = {
           url: reader.result as string,
           scale: 1,
-          fit: 'cover',
+          fit: pageIdx === 'logo' ? 'contain' : 'cover',
           position: { x: 50, y: 50 }
         };
 
         if (pageIdx === 'cover') {
           onEventUpdate({ coverImage: metadata });
+        } else if (pageIdx === 'logo') {
+          onEventUpdate({ logo: metadata });
         } else {
           const newPages = [...eventData.additionalPages];
           newPages[pageIdx] = { 
@@ -73,9 +76,11 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
     }
   };
 
-  const updateImageMeta = (pageIdx: number | 'cover', updates: Partial<ImageMetadata>) => {
+  const updateImageMeta = (pageIdx: number | 'cover' | 'logo', updates: Partial<ImageMetadata>) => {
     if (pageIdx === 'cover') {
       onEventUpdate({ coverImage: { ...eventData.coverImage!, ...updates } });
+    } else if (pageIdx === 'logo') {
+      onEventUpdate({ logo: { ...eventData.logo!, ...updates } });
     } else {
       const newPages = [...eventData.additionalPages];
       const currentImg = newPages[pageIdx].images[0];
@@ -89,9 +94,11 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
     }
   };
 
-  const removeImage = (pageIdx: number | 'cover') => {
+  const removeImage = (pageIdx: number | 'cover' | 'logo') => {
     if (pageIdx === 'cover') {
       onEventUpdate({ coverImage: undefined });
+    } else if (pageIdx === 'logo') {
+      onEventUpdate({ logo: undefined });
     } else {
       const newPages = [...eventData.additionalPages];
       newPages[pageIdx] = { ...newPages[pageIdx], images: [] };
@@ -117,7 +124,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
     </div>
   );
 
-  const ImageController = ({ meta, pageIdx }: { meta: ImageMetadata, pageIdx: number | 'cover' }) => (
+  const ImageController = ({ meta, pageIdx }: { meta: ImageMetadata, pageIdx: number | 'cover' | 'logo' }) => (
     <div className="mt-3 bg-white border border-slate-200 rounded-2xl p-4 space-y-4 shadow-sm">
       <div className="flex items-center justify-between gap-4">
         <div className="flex bg-slate-100 p-1 rounded-xl">
@@ -155,7 +162,7 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
         <ControlGroup 
           label="Zoom" 
           icon={ZoomIn} 
-          min="0.5" 
+          min="0.1" 
           max="3" 
           value={meta.scale} 
           onChange={(val: number) => updateImageMeta(pageIdx, { scale: val })} 
@@ -180,15 +187,19 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
     </div>
   );
 
-  const MediaSlot = ({ pageIdx, label }: { pageIdx: number | 'cover', label: string }) => {
-    const currentMeta = pageIdx === 'cover' ? eventData.coverImage : eventData.additionalPages[pageIdx]?.images?.[0];
+  const MediaSlot = ({ pageIdx, label, aspect = "aspect-video" }: { pageIdx: number | 'cover' | 'logo', label: string, aspect?: string }) => {
+    let currentMeta: ImageMetadata | undefined;
+    if (pageIdx === 'cover') currentMeta = eventData.coverImage;
+    else if (pageIdx === 'logo') currentMeta = eventData.logo;
+    else currentMeta = eventData.additionalPages[pageIdx]?.images?.[0];
+
     const inputId = `media-input-${pageIdx}`;
 
     return (
       <div className="space-y-3">
         <label className="block text-[11px] font-black text-slate-500 uppercase tracking-widest">{label}</label>
         <div 
-          className="relative aspect-video rounded-3xl overflow-hidden border-2 border-dashed border-slate-200 bg-white group cursor-pointer hover:border-indigo-400 transition-all shadow-inner"
+          className={`relative ${aspect} rounded-3xl overflow-hidden border-2 border-dashed border-slate-200 bg-white group cursor-pointer hover:border-indigo-400 transition-all shadow-inner`}
           onClick={() => !currentMeta && document.getElementById(inputId)?.click()}
         >
           {currentMeta ? (
@@ -211,10 +222,10 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
             </div>
           ) : (
             <div className="h-full flex flex-col items-center justify-center p-6 text-center">
-              <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-3 text-slate-300">
-                <ImageIcon size={24} />
+              <div className="w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center mb-2 text-slate-300">
+                <ImageIcon size={20} />
               </div>
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight">Drag media or Click<br/><span className="text-[9px] opacity-60">Professional Framing Enabled</span></span>
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight">Add {label}</span>
             </div>
           )}
           <input id={inputId} type="file" accept="image/*" onChange={(e) => handleMediaUpload(e, pageIdx)} className="hidden" />
@@ -280,7 +291,10 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
               </div>
             </div>
 
-            <MediaSlot pageIdx="cover" label="Main Front Page Media" />
+            <div className="space-y-6">
+              <MediaSlot pageIdx="logo" label="Brand Logo" aspect="aspect-square" />
+              <MediaSlot pageIdx="cover" label="Main Front Page Media" />
+            </div>
           </div>
         </div>
       </div>

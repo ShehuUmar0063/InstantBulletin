@@ -31,6 +31,11 @@ const BulletinPreview: React.FC<BulletinPreviewProps> = ({ eventData, config }) 
     );
   };
 
+  const LogoSlot = ({ className = "h-12 w-12" }: { className?: string }) => {
+    if (!eventData.logo) return null;
+    return <RenderImage meta={eventData.logo} className={className} />;
+  };
+
   const DateVenueBar = ({ className = "" }) => (
     <div className={`flex items-center gap-4 md:gap-6 text-gray-500 border-y border-gray-100 py-3 ${className}`}>
       <div className="flex items-center gap-2">
@@ -84,9 +89,12 @@ const BulletinPreview: React.FC<BulletinPreviewProps> = ({ eventData, config }) 
     return (
       <div className="h-full p-8 md:p-20 flex flex-col relative border-t-[6px] md:border-t-8" style={{ borderTopColor: accentColor }}>
         <header className="mb-8 md:mb-12">
-          <h2 className="text-xl md:text-3xl font-black uppercase tracking-tight mb-2 leading-tight" style={{ color: accentColor }}>
-            {pageData.title || `Extended Overview — ${pageNum - 1}`}
-          </h2>
+          <div className="flex justify-between items-start mb-4">
+             <h2 className="text-xl md:text-3xl font-black uppercase tracking-tight leading-tight flex-1 pr-10" style={{ color: accentColor }}>
+              {pageData.title || `Extended Overview — ${pageNum - 1}`}
+            </h2>
+            <LogoSlot className="h-10 w-10 opacity-40 grayscale" />
+          </div>
           <div className="h-0.5 md:h-1 w-12 md:w-20" style={{ backgroundColor: accentColor }} />
         </header>
         <div className="flex-1 grid grid-cols-12 gap-6 md:gap-10">
@@ -122,7 +130,8 @@ const BulletinPreview: React.FC<BulletinPreviewProps> = ({ eventData, config }) 
 
     if (templateId === 'classic') return (
       <div className="h-full border-[6px] md:border-[10px] p-6 md:p-10 flex flex-col relative" style={{ borderColor: accentColor }}>
-        <header className="text-center mb-6 md:mb-8">
+        <header className="text-center mb-6 md:mb-8 flex flex-col items-center">
+          <LogoSlot className="h-16 w-16 mb-6" />
           <div className="inline-block px-3 py-1 text-white text-[9px] md:text-[10px] font-black tracking-[0.2em] uppercase mb-3 md:mb-4" style={{ backgroundColor: accentColor }}>Official Event Announcement</div>
           <h1 className="text-2xl md:text-5xl font-black leading-tight uppercase tracking-tight mb-4 md:mb-6" style={{ color: '#111' }}>{eventData.title}</h1>
           <DateVenueBar className="justify-center" />
@@ -147,8 +156,9 @@ const BulletinPreview: React.FC<BulletinPreviewProps> = ({ eventData, config }) 
           ) : (
             <div className="w-full h-full flex items-center justify-center"><ImageIcon className="text-slate-200" size={48} /></div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6 md:p-10">
-            <h1 className="text-2xl md:text-6xl font-black text-white uppercase leading-none tracking-tighter drop-shadow-2xl">{eventData.title}</h1>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6 md:p-10 justify-between">
+            <h1 className="text-2xl md:text-6xl font-black text-white uppercase leading-none tracking-tighter drop-shadow-2xl flex-1 pr-6">{eventData.title}</h1>
+            <LogoSlot className="h-20 w-20 shadow-2xl rounded-xl border border-white/20" />
           </div>
         </div>
         <div className="p-6 md:p-10 grid grid-cols-12 gap-6 md:gap-10 flex-1">
@@ -170,6 +180,7 @@ const BulletinPreview: React.FC<BulletinPreviewProps> = ({ eventData, config }) 
     if (templateId === 'modern') return (
       <div className="h-full flex bg-white border border-gray-100 shadow-inner overflow-hidden">
         <div className="w-[40px] md:w-[80px] shrink-0 h-full flex flex-col items-center py-6 md:py-10 gap-10 md:gap-20 border-r border-gray-100">
+          <LogoSlot className="h-10 w-10 md:h-12 md:w-12" />
           <div className="font-black text-xs md:text-xl rotate-90 whitespace-nowrap tracking-[0.5em] text-gray-300 uppercase">Bulletin</div>
         </div>
         <div className="flex-1 p-6 md:p-12 flex flex-col">
@@ -209,6 +220,7 @@ const BulletinPreview: React.FC<BulletinPreviewProps> = ({ eventData, config }) 
     return (
       <div className="h-full bg-white p-8 md:p-20 flex flex-col justify-center items-center text-center">
         <div className="max-w-xl flex flex-col items-center">
+          <LogoSlot className="h-16 w-16 mb-10" />
           <div className="w-12 md:w-16 h-0.5 md:h-1 mb-6 md:mb-10" style={{ backgroundColor: accentColor }} />
           <h1 className="text-xl md:text-4xl font-black tracking-tight mb-6 md:mb-8 uppercase">{eventData.title}</h1>
           <div className="flex gap-2 md:gap-4 text-[9px] md:text-xs font-bold uppercase tracking-widest text-gray-400 mb-8 md:mb-12">

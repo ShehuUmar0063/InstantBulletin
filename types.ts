@@ -19,6 +19,7 @@ export interface EventData {
   content: string; // Front page content
   highlights: string[];
   coverImage?: ImageMetadata;
+  logo?: ImageMetadata;
   additionalPages: EventPage[];
 }
 
