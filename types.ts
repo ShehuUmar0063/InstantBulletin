@@ -24,7 +24,7 @@ export interface EventData {
 }
 
 export type FontFamily = 'serif' | 'sans';
-export type TemplateId = 'classic' | 'modern' | 'magazine' | 'minimal';
+export type TemplateId = 'classic' | 'modern' | 'magazine' | 'minimal' | 'executive' | 'gallery' | 'editorial' | 'corporate';
 
 export interface BulletinConfig {
   primaryColor: string;

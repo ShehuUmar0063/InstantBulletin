@@ -24,44 +24,33 @@ type AppStep = 'welcome' | 'template' | 'edit' | 'export';
 const TemplateThumbnail: React.FC<{ id: TemplateId, accentColor: string }> = ({ id, accentColor }) => {
   const baseStyles = "w-full h-full relative overflow-hidden bg-white border border-slate-200 shadow-sm transition-transform group-hover:scale-[1.03]";
   
-  if (id === 'classic') {
+  if (id === 'classic' || id === 'executive' || id === 'corporate') {
     return (
       <div className={baseStyles}>
         <div className="p-2 border-[2px]" style={{ borderColor: accentColor }}>
-          <div className="h-1 w-1/3 bg-slate-300 mx-auto mb-1" />
-          <div className="h-3 w-3/4 mx-auto mb-1" style={{ backgroundColor: accentColor + '40' }} />
-          <div className="h-1 w-1/2 bg-slate-200 mx-auto mb-2" />
-          <div className="h-10 w-full bg-slate-100 mb-2 rounded-sm" />
+          <div className="h-1 w-1/4 bg-slate-300 mx-auto mb-1" />
+          <div className="h-2 w-3/4 mx-auto mb-1" style={{ backgroundColor: accentColor + '40' }} />
+          <div className="h-8 w-full bg-slate-100 mb-2 rounded-sm" />
           <div className="flex gap-2">
             <div className="flex-1 space-y-1">
               <div className="h-1 w-full bg-slate-200" />
               <div className="h-1 w-full bg-slate-200" />
-              <div className="h-1 w-2/3 bg-slate-200" />
             </div>
-            <div className="w-1/3 h-12 bg-slate-50 rounded-sm border border-slate-100" />
           </div>
         </div>
       </div>
     );
   }
 
-  if (id === 'magazine') {
+  if (id === 'magazine' || id === 'editorial') {
     return (
       <div className={baseStyles}>
-        <div className="h-1/3 w-full bg-slate-200 relative">
-          <div className="absolute bottom-1 left-1 h-3 w-3/4" style={{ backgroundColor: accentColor }} />
+        <div className="h-1/2 w-full bg-slate-200 relative">
+          <div className="absolute bottom-1 right-1 h-2 w-4" style={{ backgroundColor: accentColor }} />
         </div>
-        <div className="p-2 space-y-2">
+        <div className="p-2 space-y-1">
+          <div className="h-2 w-full bg-slate-900" />
           <div className="h-1 w-1/2 bg-slate-300" />
-          <div className="h-2 w-full bg-slate-100 rounded-sm" style={{ borderLeft: `2px solid ${accentColor}` }} />
-          <div className="flex gap-2">
-            <div className="flex-1 space-y-1">
-              <div className="h-1 w-full bg-slate-200" />
-              <div className="h-1 w-full bg-slate-200" />
-              <div className="h-1 w-1/2 bg-slate-200" />
-            </div>
-            <div className="w-1/4 h-10 bg-slate-50 rounded-sm" />
-          </div>
         </div>
       </div>
     );
@@ -70,42 +59,31 @@ const TemplateThumbnail: React.FC<{ id: TemplateId, accentColor: string }> = ({ 
   if (id === 'modern') {
     return (
       <div className={baseStyles + " flex"}>
-        <div className="w-4 bg-slate-100 border-r border-slate-200 h-full flex flex-col items-center py-2 gap-2">
-          <div className="w-1 h-1 rounded-full" style={{ backgroundColor: accentColor }} />
-          <div className="w-1 h-1 rounded-full bg-slate-300" />
-        </div>
+        <div className="w-3 bg-slate-100 h-full border-r border-slate-200" />
         <div className="flex-1 p-2 space-y-2">
-          <div className="h-1 w-4" style={{ backgroundColor: accentColor }} />
-          <div className="h-6 w-full bg-slate-900 rounded-sm" />
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-1">
-              <div className="h-1 w-full bg-slate-300" />
-              <div className="h-8 w-full bg-slate-200 rounded-sm" />
-            </div>
-            <div className="h-16 bg-slate-800 rounded-md" />
-          </div>
+          <div className="h-4 w-full bg-slate-900" />
+          <div className="h-12 w-full bg-slate-200 rounded-sm" />
         </div>
       </div>
     );
   }
 
-  if (id === 'minimal') {
+  if (id === 'gallery') {
     return (
-      <div className={baseStyles + " flex flex-col items-center justify-center p-4"}>
-        <div className="w-4 h-0.5 mb-4" style={{ backgroundColor: accentColor }} />
-        <div className="h-2 w-3/4 bg-slate-900 mb-2" />
-        <div className="h-1 w-1/2 bg-slate-300 mb-6" />
-        <div className="h-12 w-full bg-slate-50 border border-slate-100 mb-6" />
-        <div className="grid grid-cols-3 gap-2 w-full">
-          <div className="h-1 bg-slate-200" />
-          <div className="h-1 bg-slate-200" />
-          <div className="h-1 bg-slate-200" />
-        </div>
+      <div className={baseStyles + " p-2 flex flex-col items-center"}>
+        <div className="h-1 w-2 bg-slate-300 mb-2" />
+        <div className="h-16 w-full bg-slate-100 border-2 border-slate-200 mb-2" />
+        <div className="h-2 w-full bg-slate-900" />
       </div>
     );
   }
 
-  return null;
+  return (
+    <div className={baseStyles + " flex flex-col items-center justify-center p-4"}>
+      <div className="w-4 h-0.5 mb-2" style={{ backgroundColor: accentColor }} />
+      <div className="h-2 w-3/4 bg-slate-900" />
+    </div>
+  );
 };
 
 const App: React.FC = () => {
@@ -116,17 +94,17 @@ const App: React.FC = () => {
   const exportRef = useRef<HTMLDivElement>(null);
   
   const [eventData, setEventData] = useState<EventData>({
-    title: 'The Annual Tech Summit 2024',
-    date: 'October 24, 2024',
-    location: 'Grand Convention Center, San Francisco',
-    content: 'Join us for a day of innovation, networking, and groundbreaking announcements. This year\'s summit brings together the brightest minds in software engineering and artificial intelligence to discuss the future of the digital landscape.',
+    title: 'Design Innovation Summit',
+    date: 'November 12, 2024',
+    location: 'Metropolitan Arts Hub, NYC',
+    content: 'An immersive experience exploring the intersection of technology and human-centric design. This summit brings together global visionaries to redefine the future of creativity and social impact in the digital age.',
     highlights: [
-      'Interactive AI Workshops',
-      'Networking Gala with Industry Leaders',
-      'Exclusive Product Reveal'
+      'Generative Art Installations',
+      'Future of UX Panel Discussion',
+      'Sustainable Product Showcase'
     ],
     coverImage: {
-      url: 'https://images.unsplash.com/photo-1540575861501-7cf05a4b125a?auto=format&fit=crop&q=80&w=2070',
+      url: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=2070',
       scale: 1,
       fit: 'cover',
       position: { x: 50, y: 50 }
@@ -136,7 +114,7 @@ const App: React.FC = () => {
   });
 
   const [config, setConfig] = useState<BulletinConfig>({
-    primaryColor: '#3b82f6',
+    primaryColor: '#4f46e5',
     fontFamily: 'serif',
     templateId: 'classic',
     pageCount: 1
@@ -162,16 +140,23 @@ const App: React.FC = () => {
     if (exportRef.current === null) return;
     
     setIsExporting(true);
-    await new Promise(r => setTimeout(r, 600));
+    await new Promise(r => setTimeout(r, 2000));
 
     try {
       const dataUrl = await toPng(exportRef.current, { 
         cacheBust: true, 
-        pixelRatio: 2,
+        pixelRatio: 4,
+        backgroundColor: '#ffffff',
+        skipAutoScale: true,
+        style: {
+          transform: 'scale(1)',
+          transformOrigin: 'top left',
+          borderRadius: '0px'
+        }
       });
       
       const link = document.createElement('a');
-      link.download = `${eventData.title || 'Bulletin'}.png`;
+      link.download = `${eventData.title.replace(/\s+/g, '_')}_Bulletin.png`;
       link.href = dataUrl;
       link.click();
       
@@ -180,6 +165,7 @@ const App: React.FC = () => {
     } catch (err) {
       console.error('Export failed:', err);
       setIsExporting(false);
+      alert('High-quality capture failed. Please ensure your images are fully loaded and try again.');
     }
   }, [eventData.title]);
 
@@ -207,54 +193,35 @@ const App: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-[#f8fafc]">
       {isExporting && (
-        <div className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center no-print">
-          <div className="relative w-20 h-20 mb-6">
-            <Loader2 className="w-full h-full text-indigo-500 animate-spin absolute" />
-            <ImageIcon className="w-10 h-10 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+        <div className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center no-print">
+          <div className="relative w-24 h-24 mb-8">
+            <Loader2 className="w-full h-full text-indigo-400 animate-spin absolute opacity-20" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Sparkles className="w-10 h-10 text-white animate-pulse" />
+            </div>
           </div>
-          <h2 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">Capturing Image</h2>
-          <p className="text-slate-400 max-w-xs text-sm leading-relaxed">Rendering your high-resolution bulletin. Please stay on this screen.</p>
+          <h2 className="text-2xl font-black text-white mb-3 uppercase tracking-tight">Finalizing Document</h2>
+          <p className="text-slate-400 max-w-sm text-sm leading-relaxed font-medium">Generating high-fidelity master assets. This ensures perfect quality in print.</p>
         </div>
       )}
 
       {showExportGuide && (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-end md:items-center justify-center p-4 no-print">
            <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden shadow-2xl animate-in slide-in-from-bottom-4 duration-300">
-             <div className="p-6 md:p-8">
-               <div className="flex justify-between items-start mb-6">
-                 <h3 className="text-xl font-black text-slate-900 uppercase">Export Complete</h3>
-                 <button onClick={() => setShowExportGuide(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X size={20}/></button>
+             <div className="p-8 text-center">
+               <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                 <CheckCircle2 className="text-green-600" size={32}/>
                </div>
-               
-               <div className="bg-green-50 p-4 rounded-2xl flex gap-4 mb-6">
-                  <CheckCircle2 className="text-green-600 shrink-0" size={24}/>
-                  <div>
-                    <p className="font-bold text-slate-900 text-sm mb-1">Download Started</p>
-                    <p className="text-xs text-slate-500 leading-relaxed">Your PNG image is downloading. Check your "Downloads" folder.</p>
-                  </div>
-               </div>
-               
-               <button 
-                onClick={() => setShowExportGuide(false)}
-                className="w-full py-4 bg-slate-900 text-white font-black uppercase tracking-widest text-xs rounded-2xl hover:bg-slate-800 transition-colors"
-               >
-                 Got it!
-               </button>
+               <h3 className="text-2xl font-black text-slate-900 uppercase mb-2">Saved Successfully</h3>
+               <p className="text-slate-500 text-sm mb-8">Your professional bulletin has been generated by InstantBulletin.</p>
+               <button onClick={() => setShowExportGuide(false)} className="w-full py-4 bg-slate-900 text-white font-black uppercase tracking-widest text-xs rounded-2xl active:scale-95 shadow-xl">Back to Editor</button>
              </div>
            </div>
         </div>
       )}
 
-      <header className="no-print bg-white border-b border-slate-200 px-4 md:px-6 py-4 flex justify-between items-center sticky top-0 z-50">
-        <div className="flex items-center gap-2 md:gap-3">
-          <div className="w-9 h-9 md:w-10 md:h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-indigo-200 shadow-lg shrink-0">
-            <FileText size={20} />
-          </div>
-          <div className="overflow-hidden">
-            <h1 className="text-base md:text-lg font-bold text-slate-900 leading-none truncate">InstantBulletin</h1>
-            <p className="text-[9px] md:text-[10px] text-slate-400 uppercase tracking-widest mt-0.5 font-bold">Studio Engine</p>
-          </div>
-        </div>
+      <header className="no-print bg-white px-4 md:px-6 py-3 flex justify-between items-center sticky top-0 z-50">
+        <div className="flex items-center"></div>
 
         {step !== 'welcome' && (
           <nav className="hidden md:flex items-center gap-8">
@@ -280,44 +247,24 @@ const App: React.FC = () => {
         )}
 
         <div className="flex items-center gap-2 md:gap-3">
-          {step === 'welcome' && (
-            <button 
-              onClick={nextStep}
-              className="bg-slate-900 hover:bg-slate-800 text-white px-4 md:px-5 py-2 md:py-2.5 rounded-xl font-bold text-xs md:text-sm transition-all whitespace-nowrap"
-            >
-              Get Started
-            </button>
-          )}
           {step !== 'welcome' && (
-            <button 
-              className="md:hidden p-2 text-slate-600"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            <button className="md:hidden p-3 text-slate-600 bg-slate-50 rounded-xl" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           )}
         </div>
 
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 p-4 md:hidden shadow-xl z-50">
-             <div className="flex flex-col gap-4">
+          <div className="absolute top-full left-0 right-0 bg-white border-b border-slate-200 p-4 md:hidden shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+             <div className="flex flex-col gap-3">
                 {[
                   { id: 'template', label: 'Layout' },
                   { id: 'edit', label: 'Content' },
                   { id: 'export', label: 'Review' }
                 ].map((s, i) => (
-                  <button 
-                    key={s.id}
-                    onClick={() => {
-                      setStep(s.id as AppStep);
-                      setMobileMenuOpen(false);
-                    }}
-                    className={`flex items-center gap-4 p-3 rounded-xl transition-colors ${step === s.id ? 'bg-indigo-50 text-indigo-600' : 'text-slate-500'}`}
-                  >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${step === s.id ? 'bg-indigo-600 text-white' : 'bg-slate-100'}`}>
-                      {i + 1}
-                    </div>
-                    <span className="font-bold text-sm uppercase tracking-widest">{s.label}</span>
+                  <button key={s.id} onClick={() => { setStep(s.id as AppStep); setMobileMenuOpen(false); }} className={`flex items-center gap-4 p-4 rounded-2xl transition-all ${step === s.id ? 'bg-indigo-50 text-indigo-700 font-bold' : 'text-slate-500 hover:bg-slate-50'}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${step === s.id ? 'bg-indigo-600 text-white' : 'bg-slate-200'}`}>{i + 1}</div>
+                    <span className="text-sm uppercase tracking-widest">{s.label}</span>
                   </button>
                 ))}
              </div>
@@ -327,59 +274,44 @@ const App: React.FC = () => {
 
       <main className="flex-1 overflow-x-hidden">
         {step === 'welcome' && (
-          <section className="flex flex-col items-center justify-center text-center px-6 py-12 md:py-20 max-w-4xl mx-auto">
-            <div className="bg-indigo-50 text-indigo-600 px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold uppercase tracking-widest mb-6 flex items-center gap-2">
-              <Sparkles size={14} /> Design Your Narrative
+          <section className="flex flex-col items-center justify-center text-center px-6 py-12 md:py-24 max-w-4xl mx-auto">
+            <div className="bg-indigo-50 text-indigo-600 px-5 py-2 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.2em] mb-8 flex items-center gap-2 shadow-sm">
+              <Sparkles size={14} /> Professional Design Tool
             </div>
-            <h2 className="text-3xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight leading-tight">
-              Professional Event Bulletins <br className="hidden md:block"/><span className="text-indigo-600">Generated Instantly.</span>
+            <h2 className="text-4xl md:text-7xl font-black text-slate-900 mb-8 tracking-tighter leading-none">
+              High-Quality Bulletins <br className="hidden md:block"/><span className="text-indigo-600">Created Instantly.</span>
             </h2>
-            <p className="text-slate-500 text-sm md:text-xl mb-10 md:text-xl leading-relaxed max-w-2xl">
-              Create beautifully typeset, printable announcements for your events. 
-              High-resolution image or PDF export for easy sharing and printing.
-            </p>
-            <button 
-              onClick={nextStep}
-              className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-2xl font-bold text-base md:text-lg flex items-center justify-center gap-3 transition-all shadow-2xl shadow-indigo-200 group active:scale-95"
-            >
-              Create My Bulletin
-              <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+            <p className="text-slate-500 text-base md:text-xl mb-12 leading-relaxed max-w-2xl font-medium">Create professionally typeset announcements. High-resolution export optimized for printing and high-res brand logos.</p>
+            <button onClick={nextStep} className="w-full md:w-auto bg-slate-900 hover:bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-black text-lg flex items-center justify-center gap-4 transition-all shadow-2xl group active:scale-95">
+              Start Designing <ChevronRight className="group-hover:translate-x-2 transition-transform" />
             </button>
           </section>
         )}
 
         {step === 'template' && (
-          <section className="max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-12">
-            <div className="mb-8 md:mb-10 text-center">
-              <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">Choose Your Layout</h3>
-              <p className="text-sm md:text-base text-slate-500">Pick a primary style for your multi-page bulletin</p>
+          <section className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-16">
+            <div className="mb-12 md:mb-16 text-center">
+              <h3 className="text-3xl md:text-4xl font-black text-slate-900 mb-3 tracking-tight">Select a Layout</h3>
+              <p className="text-sm md:text-base text-slate-500 font-medium">Layouts specifically optimized for high-res logo and content integration without overlap.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {[
-                { id: 'classic', name: 'The Classic', desc: 'Centered header with side highlights.', font: 'serif' },
-                { id: 'magazine', name: 'The Feature', desc: 'Large hero image with bold sidebar.', font: 'serif' },
-                { id: 'modern', name: 'The Edge', desc: 'Asymmetrical layout for tech & arts.', font: 'sans' },
-                { id: 'minimal', name: 'The Pure', desc: 'Focused on clean lines and whitespace.', font: 'sans' }
+                { id: 'corporate', name: 'The Corporate', desc: 'Dedicated header space for prominent brand logos.', font: 'sans' },
+                { id: 'editorial', name: 'The Editorial', desc: 'Asymmetric artistic layout for creative events.', font: 'serif' },
+                { id: 'executive', name: 'The Executive', desc: 'Balanced logo-first corporate aesthetic.', font: 'serif' },
+                { id: 'gallery', name: 'The Gallery', desc: 'Bold imagery with minimal signatures.', font: 'sans' },
+                { id: 'magazine', name: 'The Feature', desc: 'Editorial hero-focused composition.', font: 'serif' },
+                { id: 'classic', name: 'The Classic', desc: 'Timeless symmetrical arrangement.', font: 'serif' },
+                { id: 'modern', name: 'The Edge', desc: 'Sleek sidebar-driven tech layout.', font: 'sans' },
+                { id: 'minimal', name: 'The Pure', desc: 'Ultra-clean, spacing-focused design.', font: 'sans' }
               ].map((t) => (
-                <div 
-                  key={t.id}
-                  onClick={() => {
-                    updateConfig({ 
-                      templateId: t.id as TemplateId,
-                      fontFamily: t.font as any
-                    });
-                    nextStep();
-                  }}
-                  className={`group cursor-pointer bg-white border-2 rounded-3xl p-4 md:p-6 transition-all hover:shadow-2xl flex flex-col ${
-                    config.templateId === t.id ? 'border-indigo-600 shadow-xl shadow-indigo-50 scale-[1.02]' : 'border-slate-100 hover:border-indigo-200'
-                  }`}
-                >
-                  <div className="aspect-[1/1.414] bg-slate-50 rounded-2xl mb-4 md:mb-6 overflow-hidden border border-slate-100 p-3 md:p-4 relative group-hover:bg-white transition-colors">
+                <div key={t.id} onClick={() => { updateConfig({ templateId: t.id as TemplateId, fontFamily: t.font as any }); nextStep(); }} className={`group cursor-pointer bg-white border-2 rounded-[2rem] p-5 md:p-8 transition-all hover:shadow-2xl flex flex-col ${config.templateId === t.id ? 'border-indigo-600 shadow-2xl scale-[1.02]' : 'border-slate-100 hover:border-indigo-200'}`}>
+                  <div className="aspect-[1/1.414] bg-slate-50 rounded-3xl mb-6 md:mb-8 overflow-hidden border border-slate-100 p-4 relative group-hover:bg-white transition-colors">
                      <TemplateThumbnail id={t.id as TemplateId} accentColor={config.primaryColor} />
                   </div>
                   <div className="mt-auto">
-                    <h4 className="text-base md:text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{t.name}</h4>
-                    <p className="text-[11px] md:text-xs text-slate-500 mt-1 leading-relaxed">{t.desc}</p>
+                    <h4 className="text-xl font-black text-slate-900 group-hover:text-indigo-600 transition-colors tracking-tight">{t.name}</h4>
+                    <p className="text-xs text-slate-500 mt-2 leading-relaxed font-medium">{t.desc}</p>
                   </div>
                 </div>
               ))}
@@ -388,72 +320,40 @@ const App: React.FC = () => {
         )}
 
         {step === 'edit' && (
-          <section className="bg-white border-y border-slate-200 py-8 md:py-12">
+          <section className="bg-white border-y border-slate-100 py-10 md:py-16">
             <div className="max-w-6xl mx-auto px-4 md:px-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 md:mb-10 gap-4">
-                <div className="flex items-center gap-3">
-                  <button onClick={prevStep} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400">
-                    <ChevronLeft size={24} />
-                  </button>
-                  <h3 className="text-xl md:text-3xl font-bold text-slate-900">Craft Your Message</h3>
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 md:mb-16 gap-6">
+                <div className="flex items-center gap-4">
+                  <button onClick={prevStep} className="p-3 bg-slate-50 hover:bg-slate-100 rounded-2xl transition-all text-slate-400 hover:text-indigo-600"><ChevronLeft size={24} /></button>
+                  <h3 className="text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Editor Studio</h3>
                 </div>
-                <button 
-                  onClick={nextStep}
-                  className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-lg shadow-indigo-100 active:scale-95"
-                >
-                  Generate Preview <ChevronRight size={18} />
-                </button>
+                <button onClick={nextStep} className="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white px-10 py-4 rounded-2xl font-black text-base flex items-center justify-center gap-3 transition-all shadow-xl active:scale-95">Generate Preview <ChevronRight size={20} /></button>
               </div>
-              <EditorPanel 
-                eventData={eventData} 
-                config={config} 
-                onEventUpdate={updateEventData} 
-                onConfigUpdate={updateConfig} 
-              />
+              <EditorPanel eventData={eventData} config={config} onEventUpdate={updateEventData} onConfigUpdate={updateConfig} />
             </div>
           </section>
         )}
 
         {step === 'export' && (
-          <section className="bg-slate-200 py-8 md:py-20 px-4 md:px-6 min-h-screen">
-             <div className="no-print max-w-6xl mx-auto mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
-               <div className="flex items-center gap-4 w-full md:w-auto">
-                  <button onClick={prevStep} className="p-3 bg-white hover:bg-slate-50 rounded-2xl shadow-sm text-slate-600 transition-all border border-slate-300">
-                    <ChevronLeft size={20} />
-                  </button>
+          <section className="bg-slate-100 py-8 md:py-24 px-2 md:px-6 min-h-screen">
+             <div className="no-print max-w-6xl mx-auto mb-12 flex flex-col md:flex-row items-center justify-between gap-8 px-2">
+               <div className="flex items-center gap-5 w-full md:w-auto">
+                  <button onClick={prevStep} className="p-4 bg-white hover:bg-slate-50 rounded-[1.5rem] shadow-sm text-slate-600 border border-slate-200"><ChevronLeft size={20} /></button>
                   <div>
-                    <h3 className="text-lg md:text-2xl font-bold text-slate-900 leading-tight">Final Review</h3>
-                    <p className="text-[10px] md:text-sm text-slate-600">{config.pageCount} page{config.pageCount > 1 ? 's' : ''} ready</p>
+                    <h3 className="text-2xl font-black text-slate-900 leading-none mb-1">Final Master</h3>
+                    <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Document Review</p>
                   </div>
                </div>
-               <div className="flex flex-col items-stretch md:items-end gap-3 w-full md:w-auto">
-                 <div className="flex flex-col md:flex-row gap-3">
-                   <button 
-                    onClick={handleExportPDF}
-                    className="px-6 py-3 bg-white hover:bg-slate-50 text-slate-700 rounded-2xl font-bold shadow-sm transition-all flex items-center justify-center gap-2 border border-slate-300"
-                   >
-                     <Printer size={18} /> Export as PDF
-                   </button>
-                   <button 
-                    onClick={handleExportImage} 
-                    disabled={isExporting}
-                    className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow-xl shadow-indigo-200 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
-                   >
-                     {isExporting ? <Loader2 className="animate-spin" size={18}/> : <Download size={18} />}
-                     Export as Image
-                   </button>
-                 </div>
-                 <div className="bg-white/80 p-3 rounded-xl flex items-start gap-3 border border-slate-300 shadow-sm">
-                    <Smartphone size={20} className="text-indigo-600 mt-0.5 shrink-0" />
-                    <p className="text-[10px] md:text-[11px] text-slate-700 font-bold leading-tight">
-                       Choose Image or PDF for final output.
-                    </p>
+               <div className="flex flex-col items-stretch md:items-end gap-4 w-full md:w-auto">
+                 <div className="flex flex-col sm:flex-row gap-4">
+                   <button onClick={handleExportPDF} className="px-8 py-4 bg-white hover:bg-slate-50 text-slate-700 rounded-[2rem] font-black shadow-sm transition-all flex items-center justify-center gap-3 border border-slate-200 active:scale-95"><Printer size={20} /> PDF Export</button>
+                   <button onClick={handleExportImage} disabled={isExporting} className="px-10 py-4 bg-slate-900 hover:bg-indigo-600 text-white rounded-[2rem] font-black shadow-2xl transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50">{isExporting ? <Loader2 className="animate-spin" size={20}/> : <Download size={20} />} High-Res PNG</button>
                  </div>
                </div>
              </div>
 
-            <div className="max-w-full md:max-w-[850px] mx-auto pb-20">
-              <div ref={exportRef} className="print-area bg-white p-2 md:p-0">
+            <div className="max-w-full md:max-w-[850px] mx-auto pb-32 px-1">
+              <div ref={exportRef} className="print-area bg-white shadow-2xl rounded-2xl md:rounded-none overflow-hidden transform-gpu">
                 <BulletinPreview eventData={eventData} config={config} />
               </div>
             </div>
@@ -461,8 +361,9 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <footer className="no-print bg-white border-t border-slate-100 py-6 px-6 text-center">
-        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">InstantBulletin Studio © 2024</p>
+      <footer className="no-print bg-white border-t border-slate-50 py-10 px-6 text-center">
+        <p className="text-[11px] text-slate-900 font-black uppercase tracking-[0.3em] mb-2">InstantBulletin</p>
+        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Bn_Jibril © 2024</p>
       </footer>
     </div>
   );

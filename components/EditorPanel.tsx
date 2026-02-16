@@ -107,36 +107,36 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
   };
 
   const ControlGroup = ({ label, icon: Icon, min, max, value, onChange }: any) => (
-    <div className="flex items-center gap-3">
-      <Icon size={12} className="text-slate-400 shrink-0" />
+    <div className="flex items-center gap-3 py-2">
+      <Icon size={14} className="text-slate-400 shrink-0" />
       <input 
         type="range" 
         min={min} 
         max={max} 
-        step={label === 'Zoom' ? '0.1' : '1'} 
+        step={label === 'Zoom' ? '0.05' : '1'} 
         value={value} 
         onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="flex-1 accent-indigo-600 h-1 bg-slate-200 rounded-full appearance-none cursor-pointer"
+        className="flex-1 accent-indigo-600 h-2 bg-slate-200 rounded-full appearance-none cursor-pointer"
       />
-      <span className="text-[9px] font-mono font-bold text-slate-500 w-6 text-right">
+      <span className="text-[10px] font-mono font-bold text-slate-500 w-8 text-right">
         {label === 'Zoom' ? `${Math.round(value * 100)}%` : `${Math.round(value)}%`}
       </span>
     </div>
   );
 
   const ImageController = ({ meta, pageIdx }: { meta: ImageMetadata, pageIdx: number | 'cover' | 'logo' }) => (
-    <div className="mt-3 bg-white border border-slate-200 rounded-2xl p-4 space-y-4 shadow-sm">
+    <div className="mt-4 bg-white border border-slate-200 rounded-2xl p-4 space-y-4 shadow-sm">
       <div className="flex items-center justify-between gap-4">
-        <div className="flex bg-slate-100 p-1 rounded-xl">
+        <div className="flex bg-slate-100 p-1 rounded-xl w-fit">
           <button 
             onClick={() => updateImageMeta(pageIdx, { fit: 'cover' })}
-            className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all ${meta.fit === 'cover' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}
+            className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${meta.fit === 'cover' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}
           >
             Fill
           </button>
           <button 
             onClick={() => updateImageMeta(pageIdx, { fit: 'contain' })}
-            className={`px-3 py-1.5 text-[9px] font-black uppercase tracking-widest rounded-lg transition-all ${meta.fit === 'contain' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}
+            className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${meta.fit === 'contain' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}
           >
             Fit
           </button>
@@ -144,21 +144,21 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
         <div className="flex gap-2">
            <button 
             onClick={() => updateImageMeta(pageIdx, { scale: 1, position: { x: 50, y: 50 } })}
-            className="p-2 bg-slate-50 text-slate-400 hover:text-indigo-600 transition-colors rounded-lg border border-slate-200"
+            className="p-2.5 bg-slate-50 text-slate-400 hover:text-indigo-600 transition-colors rounded-xl border border-slate-200"
             title="Reset All"
            >
              <RefreshCcw size={14} />
            </button>
            <button 
             onClick={() => removeImage(pageIdx)}
-            className="p-2 bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-colors rounded-lg border border-red-100"
+            className="p-2.5 bg-red-50 text-red-400 hover:bg-red-500 hover:text-white transition-colors rounded-xl border border-red-100"
            >
              <Trash2 size={14} />
            </button>
         </div>
       </div>
       
-      <div className="space-y-3">
+      <div className="space-y-1">
         <ControlGroup 
           label="Zoom" 
           icon={ZoomIn} 
@@ -215,7 +215,10 @@ const EditorPanel: React.FC<EditorPanelProps> = ({ eventData, config, onEventUpd
                />
                <div 
                 className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                onClick={() => document.getElementById(inputId)?.click()}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    document.getElementById(inputId)?.click();
+                }}
                >
                  <span className="text-white text-[10px] font-black uppercase tracking-widest bg-black/40 px-5 py-2.5 rounded-2xl backdrop-blur-md border border-white/20">Replace Asset</span>
                </div>
